@@ -14,8 +14,32 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Example {
-    id String @id @default(cuid())
+model Lift {
+    id          Int       @id @default(autoincrement())
+    name        String    @unique
+    movement    Movement  @relation(fields: [movementId], references: [id])
+    movementId  Int
+    equipment   Equipment @relation(fields: [equipmentId], references: [id])
+    equipmentId Int
+    muscles     Muscle[]
+}
+
+model Movement {
+    id   Int    @id @default(autoincrement())
+    name String @unique
+    Lift Lift[]
+}
+
+model Equipment {
+    id   Int    @id @default(autoincrement())
+    name String @unique
+    Lift Lift[]
+}
+
+model Muscle {
+    id    Int    @id @default(autoincrement())
+    name  String @unique
+    lifts Lift[]
 }
 
 // Necessary for Next auth
