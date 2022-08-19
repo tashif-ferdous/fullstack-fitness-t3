@@ -18,16 +18,17 @@ datasource db {
 // Lifts  //
 ////////////
 model Lift {
-    id          Int       @id @default(autoincrement())
-    name        String    @unique
+    id          Int        @id @default(autoincrement())
+    name        String     @unique
     cues        String?
     link        String?
-    movement    Movement  @relation(fields: [movementId], references: [id])
+    movement    Movement   @relation(fields: [movementId], references: [id])
     movementId  Int
-    equipment   Equipment @relation(fields: [equipmentId], references: [id])
+    equipment   Equipment  @relation(fields: [equipmentId], references: [id])
     equipmentId Int
     muscles     Muscle[]
     Set         Set[]
+    Exercise    Exercise[]
 }
 
 model Movement {
@@ -48,26 +49,35 @@ model Muscle {
     lifts Lift[]
 }
 
-/////////////////////////////////////////////////////
-// Sets & Programs (e.g. blueprints for a workout) //
-/////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+// Sets & Exercise & Programs (e.g. blueprints for a workout) //
+////////////////////////////////////////////////////////////////
 model Set {
-    id        Int      @id @default(autoincrement())
-    name      String   @unique
-    lift      Lift     @relation(fields: [liftId], references: [id])
-    reps      Int[]
-    liftId    Int
-    Program   Program? @relation(fields: [programId], references: [id])
-    programId Int?
+    id         Int       @id @default(autoincrement())
+    name       String    @unique
+    lift       Lift      @relation(fields: [liftId], references: [id])
+    rep        Int
+    liftId     Int
+    Exercise   Exercise? @relation(fields: [exerciseId], references: [id])
+    exerciseId Int?
+}
+
+model Exercise {
+    id          Int      @id @default(autoincrement())
+    name        String   @unique
+    sets        Set[]
+    orderSetIds Int[]
+    lift        Lift     @relation(fields: [liftId], references: [id])
+    liftId      Int
+    Program     Program? @relation(fields: [programId], references: [id])
+    programId   Int?
 }
 
 model Program {
-    id       Int    @id @default(autoincrement())
-    name     String @unique
-    sets     Set[]
-    // To order the sets by a CSV delimited string value of its Id 
-    // is there a better way to store ordering of a set?
-    setOrder String
+    id               Int        @id @default(autoincrement())
+    name             String     @unique
+    exercises        Exercise[]
+    orderExerciseIds Int[]
 }
 
 /////////////////////////////
