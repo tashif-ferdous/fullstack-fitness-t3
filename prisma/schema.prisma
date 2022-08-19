@@ -14,14 +14,20 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+////////////
+// Lifts  //
+////////////
 model Lift {
     id          Int       @id @default(autoincrement())
     name        String    @unique
+    cues        String?
+    link        String?
     movement    Movement  @relation(fields: [movementId], references: [id])
     movementId  Int
     equipment   Equipment @relation(fields: [equipmentId], references: [id])
     equipmentId Int
     muscles     Muscle[]
+    Set         Set[]
 }
 
 model Movement {
@@ -42,7 +48,31 @@ model Muscle {
     lifts Lift[]
 }
 
-// Necessary for Next auth
+/////////////////////////////////////////////////////
+// Sets & Programs (e.g. blueprints for a workout) //
+/////////////////////////////////////////////////////
+model Set {
+    id        Int      @id @default(autoincrement())
+    name      String
+    lift      Lift     @relation(fields: [liftId], references: [id])
+    reps      Int
+    liftId    Int
+    Program   Program? @relation(fields: [programId], references: [id])
+    programId Int?
+}
+
+model Program {
+    id       Int    @id @default(autoincrement())
+    name     String
+    sets     Set[]
+    // To order the sets by a CSV delimited string value of its Id 
+    // is there a better way to store ordering of a set?
+    setOrder String
+}
+
+/////////////////////////////
+// Necessary for Next Auth //
+/////////////////////////////
 model Account {
     id                String  @id @default(cuid())
     userId            String
