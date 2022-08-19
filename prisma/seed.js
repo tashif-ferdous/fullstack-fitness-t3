@@ -159,11 +159,27 @@ async function seedExercise({ benchReps, deadliftReps }) {
   return { bench, deadlift }
 }
 
+async function seedProgram({ bench, deadlift }) {
+  const program = await prisma.program.upsert({
+    where: { name: 'Pull & Bench' },
+    update: {},
+    create: {
+      name: 'Pull & Bench',
+      exercises: { connect: [deadlift.id, bench.id].map(id => { return { id: id } }) },
+      orderExerciseIds: [deadlift.id, bench.id]
+    }
+  })
+  console.log(program)
+  return { program }
+}
+
 seedLifts()
   .then(async () => {
     seedSets().then(async ({ benchReps, deadliftReps }) => {
-      seedExercise({ benchReps, deadliftReps }).then(async ({ bench, deadlift }) => {
-        await prisma.$disconnect()
+      seedExercise({ benchReps, deadliftReps }).then(async ({ deadlift, bench }) => {
+        seedProgram({ deadlift, bench }).then(async ({ program }) => {
+          await prisma.$disconnect
+        })
       })
     })
   })
