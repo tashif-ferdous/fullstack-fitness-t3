@@ -13,6 +13,12 @@ const Home: NextPage = () => {
   const deadlift = trpc.useQuery(['lift.getByName', {name: 'Barbell Sumo Deadlift'}])
   const liftById = trpc.useQuery(['lift.getById', {id: 2}])
 
+  // const generateRegularDeadlift = {}
+  // const regularDeadlift = {
+  //   name: "Barbell Deadlift",
+  //   movementId: deadlift.data?.movementId.
+  // }
+
   return (
     <>
       <Head>
