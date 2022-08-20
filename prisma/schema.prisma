@@ -20,6 +20,7 @@ datasource db {
 model Lift {
     id          Int        @id @default(autoincrement())
     name        String     @unique
+    description String
     cues        String?
     link        String?
     movement    Movement   @relation(fields: [movementId], references: [id])

@@ -12,6 +12,7 @@ async function seedLifts() {
     update: {},
     create: {
       name: 'Barbell Sumo Deadlift',
+      description: 'Best pull lift, since it activates your entire posterior chain.',
       movement: {
         create: {
           name: 'Deadlift'
@@ -40,6 +41,7 @@ async function seedLifts() {
     update: {},
     create: {
       name: 'Barbell Flat Bench Press',
+      description: 'Want a bigger chest?',
       movement: {
         create: {
           name: 'Flat Bench'

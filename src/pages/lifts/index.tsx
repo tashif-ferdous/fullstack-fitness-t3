@@ -5,12 +5,14 @@ import { trpc } from "../../utils/trpc";
 
 type LiftCardProps = {
   name: string;
+  description: string;
   cues?: string;
   editLink: string;
 };
 
 const Lifts: NextPage = () => {
   const lifts = trpc.useQuery(["lift.getAll"])
+  console.log(lifts.data)
 
   return (
     <>
@@ -35,7 +37,7 @@ const renderLifts = (lifts?: Lift[]) => {
   return (
     <div className="grid gap-3 pt-3 mt-3 text-center md:grid-cols-2 lg:w-2/3">
       {lifts?.map(lift => 
-        <LiftCard key={lift.id} name={lift.name} cues={lift.cues || undefined} editLink={`/lifts/${lift.id}`}/>
+        <LiftCard key={lift.id} name={lift.name} description={lift.description} cues={lift.cues || undefined} editLink={`/lifts/${lift.id}`}/>
       )}
     </div>
   )
@@ -43,13 +45,15 @@ const renderLifts = (lifts?: Lift[]) => {
 
 const LiftCard = ({
   name,
+  description,
   cues,
   editLink,
 }: LiftCardProps) => {
   return (
     <section className="flex flex-col justify-center p-6 duration-500 border-2 border-gray-500 rounded shadow-xl motion-safe:hover:scale-105">
       <h2 className="text-lg text-gray-700">{name}</h2>
-      <p className="text-sm text-gray-600">{cues}</p>
+      <p className="text-sm text-gray-600">{description}</p>
+      <p className="text-sm text-gray-500">{cues}</p>
       <a
         className="mt-3 text-sm underline text-violet-500 decoration-dotted underline-offset-2"
         href={editLink}
