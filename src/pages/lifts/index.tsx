@@ -1,14 +1,14 @@
-import { Lift } from "@prisma/client";
-import type { NextPage } from "next";
-import Head from "next/head";
-import { trpc } from "../../utils/trpc";
+import { Lift } from "@prisma/client"
+import type { NextPage } from "next"
+import Head from "next/head"
+import { trpc } from "../../utils/trpc"
 
 type LiftCardProps = {
   name: string;
   description: string;
   cues?: string;
   editLink: string;
-};
+}
 
 const Lifts: NextPage = () => {
   const lifts = trpc.useQuery(["lift.getAll"])
@@ -31,7 +31,7 @@ const Lifts: NextPage = () => {
       </main>
     </>
   );
-};
+}
 
 const renderLifts = (lifts?: Lift[]) => {
   return (
@@ -61,7 +61,7 @@ const LiftCard = ({
         Edit
       </a>
     </section>
-  );
-};
+  )
+}
 
-export default Lifts;
+export default Lifts
