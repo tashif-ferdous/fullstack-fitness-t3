@@ -9,7 +9,9 @@ type TechnologyCardProps = {
 };
 
 const Home: NextPage = () => {
-  const hello = trpc.useQuery(["example.hello", { text: "from tRPC" }]);
+  const lifts = trpc.useQuery(["lift.getAll"]);
+  const deadlift = trpc.useQuery(['lift.getByName', {name: 'Barbell Sumo Deadlift'}])
+  const liftById = trpc.useQuery(['lift.getById', {id: 2}])
 
   return (
     <>
@@ -47,7 +49,13 @@ const Home: NextPage = () => {
           />
         </div>
         <div className="pt-6 text-2xl text-blue-500 flex justify-center items-center w-full">
-          {hello.data ? <p>{hello.data.greeting}</p> : <p>Loading..</p>}
+          {lifts.data ? <p>{lifts.data.reduce((string, lift) => `${string} ${JSON.stringify(lift)}`, '')}</p> : <p>Loading..</p>}
+        </div>
+        <div className="pt-6 text-2xl text-blue-500 flex justify-center items-center w-full">
+          {deadlift.data ? <p>{JSON.stringify(deadlift.data)}</p> : <p>Loading..</p>}
+        </div>
+        <div className="pt-6 text-2xl text-blue-500 flex justify-center items-center w-full">
+          {liftById.data ? <p>{JSON.stringify(liftById.data)}</p> : <p>Loading..</p>}
         </div>
       </main>
     </>
