@@ -60,6 +60,7 @@ model Set {
     liftId     Int
     Exercise   Exercise? @relation(fields: [exerciseId], references: [id])
     exerciseId Int?
+    Log        Log[]
 }
 
 model Exercise {
@@ -78,6 +79,40 @@ model Program {
     name             String     @unique
     exercises        Exercise[]
     orderExerciseIds Int[]
+}
+
+///////////////////
+// Logs, Workout //
+///////////////////
+
+// A Log record of a set
+model Log {
+    id   Int  @id @default(autoincrement())
+    user User @relation(fields: [userId], references: [id])
+
+    set      Set     @relation(fields: [setId], references: [id])
+    workout  Workout @relation(fields: [workoutId], references: [id])
+    weights  Int[]
+    comments String?
+    link     String?
+
+    createTime DateTime
+    updateTime DateTime
+
+    userId    String
+    setId     Int
+    workoutId Int
+}
+
+model Workout {
+    id        Int      @id @default(autoincrement())
+    user      User     @relation(fields: [userId], references: [id])
+    startDate DateTime
+    Log       Log[]
+    userId    String
+
+    startTime  DateTime
+    finishTime DateTime?
 }
 
 /////////////////////////////
@@ -117,6 +152,8 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
+    Log           Log[]
+    Workout       Workout[]
 }
 
 model VerificationToken {
