@@ -19,7 +19,7 @@ export default defineNextConfig({
     domains: [
       'https://fitnessvolt.com',
       'https://i0.wp.com/t2experiment.com/',
-      'https://cdn.muscleandstrength.com/'
+      'https://cdn.muscleandstrength.com/',
     ]
   }
 });
