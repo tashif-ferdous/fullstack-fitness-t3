@@ -15,4 +15,11 @@ function defineNextConfig(config) {
 export default defineNextConfig({
   reactStrictMode: true,
   swcMinify: true,
+  images: {
+    domains: [
+      'https://fitnessvolt.com',
+      'https://i0.wp.com/t2experiment.com/',
+      'https://cdn.muscleandstrength.com/'
+    ]
+  }
 });
