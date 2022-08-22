@@ -7,10 +7,9 @@ import en from "javascript-time-ago/locale/en"
 
 import { Lift, Log } from "@prisma/client"
 
-TimeAgo.addDefaultLocale(en)
- 
 // for a single user, for a single lift
-export default function SoloLogTable({logs, lifts} : {logs: Log[], lifts: Lift[]}) {
+export default function WorkoutTable({logs, lifts} : {logs: Log[], lifts: Lift[]}) {
+  TimeAgo.addLocale(en)
   const timeAgo = new TimeAgo('en-US')
   const columnHelper = createColumnHelper<Log>()
 
@@ -18,13 +17,14 @@ export default function SoloLogTable({logs, lifts} : {logs: Log[], lifts: Lift[]
   const logColumns: ColumnDef<Log, any>[] = [
     columnHelper.accessor('createdAt', {
       header: "Time",
-      cell: date => timeAgo.format(date.getValue())
+      cell: date => <span className="italic">{timeAgo.format(date.getValue())}</span>
     }),
     columnHelper.accessor('liftId', {
       header: "Lift",
       cell: liftId => {
         const lift = lifts.find(lift => lift.id === liftId.getValue())
-        return lift? lift.name: "UNKNOWN"
+        const liftName = lift? lift.name: "UNKNOWN"
+        return <span className="font-semibold">{liftName}</span>
       },
     }),
     columnHelper.accessor('weight', {
@@ -51,15 +51,25 @@ export default function SoloLogTable({logs, lifts} : {logs: Log[], lifts: Lift[]
     getCoreRowModel: getCoreRowModel()
   })
 
+  if (!logs || logs.length === 0) {
+    return <p className="italic">Nothing logged.  Go hit the weights!</p>
+  }
 
-  return (<>
-    <div className="p-2">
-      <table>
-        <thead>
+  return (<div className="flex flex-col">
+    <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+      <table className="min-w-full divide-y divide-gray-300" style={{ borderSpacing: 0 }}>
+        <thead className="bg-gray-50">
           {table.getHeaderGroups().map(headerGroup => (
-            <tr key={headerGroup.id}>
+            <tr 
+              key={headerGroup.id}
+              className="divide-x divide-gray-200"
+            >
               {headerGroup.headers.map(header => (
-                <th key={header.id}>
+                <th 
+                  key={header.id} 
+                  scope="col" 
+                  className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                >
                   {header.isPlaceholder
                     ? null
                     : flexRender(
@@ -71,34 +81,24 @@ export default function SoloLogTable({logs, lifts} : {logs: Log[], lifts: Lift[]
             </tr>
           ))}
         </thead>
-        <tbody>
+        <tbody className="bg-white divide-y divide-gray-200">
           {table.getRowModel().rows.map(row => (
-            <tr key={row.id}>
+            <tr 
+              key={row.id}
+              className="divide-x divide-gray-200"
+            >
               {row.getVisibleCells().map(cell => (
-                <td key={cell.id}>
+                <td 
+                  key={cell.id} 
+                  className="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+                >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               ))}
             </tr>
           ))}
         </tbody>
-        <tfoot>
-          {table.getFooterGroups().map(footerGroup => (
-            <tr key={footerGroup.id}>
-              {footerGroup.headers.map(header => (
-                <th key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.footer,
-                        header.getContext()
-                      )}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </tfoot>
       </table>
     </div>
-  </>)
+  </div>)
 }
