@@ -1,6 +1,6 @@
 import { useState } from "react"
-import { SubmitHandler, useForm } from "react-hook-form"
-import Flash from "./Flash"
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
+import Flash from "../Flash"
 
 type LogFormProps = {
   createLog: (data: ILogFormInput) => void
@@ -17,8 +17,8 @@ export default function LogForm({ createLog } : LogFormProps) {
   const [flash, setFlash] = useState(false)
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm()
-  const onSubmit: SubmitHandler<ILogFormInput> = (data) => {
-    createLog(data)
+  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+    createLog(data as ILogFormInput)
     reset()
     setFlash(true)
   }

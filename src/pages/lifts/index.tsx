@@ -1,8 +1,8 @@
-import { Lift } from "@prisma/client"
 import type { NextPage } from "next"
-import Head from "next/head"
-import Loader from "../../components/Loader"
 import { trpc } from "../../utils/trpc"
+import Head from "next/head"
+import { Lift } from "@prisma/client"
+import Loader from "../../components/Loader"
 
 type LiftCardProps = {
   name: string;

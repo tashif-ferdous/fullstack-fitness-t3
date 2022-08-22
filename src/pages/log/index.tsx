@@ -1,13 +1,12 @@
 import { useState } from "react"
 import { NextPage } from "next"
 import Head from "next/head"
-import { useSession } from "next-auth/react"
 import { trpc } from "../../utils/trpc"
 
 import { Lift } from "@prisma/client"
 import LiftsSelector from "../../components/LiftSelector"
 import Loader from "../../components/Loader"
-import LogForm, { ILogFormInput } from "../../components/LogForm"
+import LogForm, { ILogFormInput } from "../../components/log/LogForm"
 
 const Log: NextPage = () => {
   // what lift are we logging?
