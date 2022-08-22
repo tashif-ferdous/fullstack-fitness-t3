@@ -6,9 +6,10 @@ import TimeAgo from "javascript-time-ago"
 import en from "javascript-time-ago/locale/en"
 
 import { Lift, Log } from "@prisma/client"
+import Link from "next/link"
 
 // for a single user, for a single lift
-export default function WorkoutTable({logs, lifts} : {logs: Log[], lifts: Lift[]}) {
+export default function WorkoutTable({logs, lifts, showLink} : {logs: Log[], lifts: Lift[], showLink: boolean}) {
   TimeAgo.addLocale(en)
   const timeAgo = new TimeAgo('en-US')
   const columnHelper = createColumnHelper<Log>()
@@ -52,7 +53,13 @@ export default function WorkoutTable({logs, lifts} : {logs: Log[], lifts: Lift[]
   })
 
   if (!logs || logs.length === 0) {
-    return <p className="italic">Nothing logged.  Go hit the weights!</p>
+    if (!showLink) {
+      return <p className="italic">Nothing logged.  Go hit the weights!</p>
+    }
+    else {
+      return (<p className="italic">Nothing logged.  Go hit the weights and 
+        <Link href="/log"><a>open the log!</a></Link>!</p>)
+    }
   }
 
   return (<div className="flex flex-col">

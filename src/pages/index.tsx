@@ -2,6 +2,7 @@ import type { NextPage } from "next"
 import Link from "next/link"
 import Head from "next/head"
 import { signIn, signOut, useSession } from "next-auth/react"
+
 import Loader from "../components/Loader"
 
 const LoginLanding = () => {
@@ -42,6 +43,13 @@ const Landing = () => {
             <h2 className="text-xl text-gray-700">Lift 🏋️</h2>
           </a>
         </Link> 
+        <Link 
+          href="/log/history"
+        >
+          <a className="mt-5 flex flex-col justify-center p-6 duration-500 border-2 border-gray-500 rounded shadow-xl motion-safe:hover:scale-105">
+            <h2 className="text-xl text-gray-700">Lift History 📕</h2>
+          </a>
+        </Link>
       </section>
     </>
   )

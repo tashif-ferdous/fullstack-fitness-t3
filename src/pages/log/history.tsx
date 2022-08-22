@@ -11,7 +11,7 @@ import SoloLogTable from "../../components/log/LogTable"
 import { useSession } from "next-auth/react"
 import Link from "next/link"
 
-const Log: NextPage = () => {
+const History: NextPage = () => {
   // what lift are we logging?
   const [selectedLift, setSelectedLift] = useState<Lift | undefined>(undefined)
   const [lifts, setLifts] = useState<Lift[]>([])
@@ -20,38 +20,14 @@ const Log: NextPage = () => {
     setSelectedLift(data[0])
   }})
 
-  const [currentWorkout, setCurrentWorkout] = useState<Log[]>([])
-  trpc.useQuery(["log.getCurrentWorkout", {}], {
+  const [history, setHistory] = useState<Log[]>([])
+  trpc.useQuery(["log.getUserLogHistory", {}], {
     onSuccess: (data) => {
-      setCurrentWorkout(data)
+      setHistory(data)
     }
   })
 
-  const ctx = trpc.useContext()
-  const createMutation = trpc.useMutation(["log.create"], {
-    onMutate: () => {
-      ctx.cancelQuery(["log.getCurrentWorkout", {}])
-      const optimisticUpdate = ctx.getQueryData(["log.getCurrentWorkout", {}]);
-      if (optimisticUpdate) {
-        ctx.setQueryData(["log.getCurrentWorkout", {}], optimisticUpdate);
-      }
-    },
-    onSettled: () => {
-      ctx.invalidateQueries(["log.getCurrentWorkout", {}])
-    }
-  })
-
-  const createLog = (data: ILogFormInput) => {
-    createMutation.mutate({
-      liftId: selectedLift?.id as number,
-      weight: data.weight,
-      reps: data.reps,
-      cues: data.cues,
-      comments: data.comments
-    })
-  }
-
-  const title = "Fullstack Fitness | Log"
+  const title = "Fullstack Fitness | Log History"
   const { data: session } = useSession()
   const name = session?.user?.name
 
@@ -82,19 +58,13 @@ const Log: NextPage = () => {
             </a>
           </Link>
         </section>
-        <section className="container mt-5 w-5-6 md:w-3/4 lg:w-2/3">
-          <LiftsSelector lifts={lifts} selectedLift={selectedLift} setLift={setSelectedLift} />
-        </section>
-        <section className="container mt-5 w:5-6 md:w-3/4 lg:w-2/3">
-          <LogForm createLog={createLog} />
-        </section>
         <section className="container mt-8 w:5-6 md:w-3/4 lg:w-2/3">
-          <h2 className="mt-3 mb-5 font-semibold uppercase text-xl">Current workout</h2>
-          <SoloLogTable logs={currentWorkout} lifts={lifts} showLink={false}/>
+          <h2 className="mt-3 mb-5 font-semibold uppercase text-xl">Lift History</h2>
+          <SoloLogTable logs={history} lifts={lifts} showLink />
         </section>
       </main>
     </>
   )
 }
 
-export default Log
+export default History

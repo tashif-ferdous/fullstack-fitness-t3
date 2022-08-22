@@ -70,8 +70,52 @@ export const logRouter = createRouter()
             gt: input.timeStart? input.timeStart: sixHoursAgo
           }
         },
-        take: input.take? input.take: 1000 
+        take: input.take? input.take: 1000,
+        orderBy: { createdAt: 'asc' },
       })
+    }
+  })
+  .query("getUserLogHistory", {
+    input: z
+      .object({
+        timeStart: z.date().nullish(),
+        take: z.number().nullish(),
+      }),   
+    async resolve({ctx, input}) {
+      const session = ctx.session
+
+      if (session === null) {
+        throw new TRPCError({code: "INTERNAL_SERVER_ERROR"})
+      }
+      const user = session.user
+      if (user === undefined) {
+        throw new TRPCError({code: "INTERNAL_SERVER_ERROR"})
+      }
+      if (input.timeStart) {
+        return await ctx.prisma.log.findMany({
+          where: {
+            userId: user.id,
+            createdAt: {
+              gt: input.timeStart 
+            }
+          },
+          take: input.take? input.take: 1000,
+          orderBy: {
+            createdAt: 'desc'
+          }
+        })
+      }
+      else {
+        return await ctx.prisma.log.findMany({
+          where: {
+            userId: user.id,
+          },
+          take: input.take? input.take: 1000,
+          orderBy: {
+            createdAt: 'desc'
+          }
+        })
+      }
     }
   })
   .mutation("create", {

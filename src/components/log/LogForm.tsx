@@ -38,7 +38,7 @@ export default function LogForm({ createLog } : LogFormProps) {
                 className="appearance-none block w-full bg-gray-50 text-gray-700 border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white"
                 placeholder="135"
               />
-              {errors.weight && <p className="text-red-500 text-xs italic mb-3">Error</p>}
+              {errors.weight && <p className="mt-2 text-red-500 text-xs italic mb-3">0 to 1500 pounds.</p>}
             </div>
             <div>
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
@@ -50,7 +50,7 @@ export default function LogForm({ createLog } : LogFormProps) {
                 className="appearance-none block w-full bg-gray-50 text-gray-700 border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" 
                 placeholder="10"
               />
-              {errors.reps && <p className="text-red-500 text-xs italic mb-3"> Error</p>}
+              {errors.reps && <p className="mt-2 text-red-500 text-xs italic mb-3">0 to 250 reps.</p>}
             </div>
           </section>
           <section className="mt-5 grid grid-cols-1 lg:grid-cols-2 gap-3">
