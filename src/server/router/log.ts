@@ -46,6 +46,34 @@ export const logRouter = createRouter()
     }
     return next()
   })
+  .query("getCurrentWorkout", {
+    input: z
+      .object({
+        timeStart: z.date().nullish(),
+        take: z.number().nullish(),
+      }),
+    async resolve({ctx, input}) {
+      const session = ctx.session
+      if (session === null) {
+        throw new TRPCError({code: "INTERNAL_SERVER_ERROR"})
+      }
+      const user = session.user
+      if (user === undefined) {
+        throw new TRPCError({code: "INTERNAL_SERVER_ERROR"})
+      }
+
+      const sixHoursAgo = new Date(Date.now() - (6 * 60 * 60 * 1000))
+      return await ctx.prisma.log.findMany({
+        where: {
+          userId: user.id,
+          createdAt: {
+            gt: input.timeStart? input.timeStart: sixHoursAgo
+          }
+        },
+        take: input.take? input.take: 1000 
+      })
+    }
+  })
   .mutation("create", {
     input: z
       .object({ 

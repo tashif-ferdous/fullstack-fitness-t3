@@ -1,8 +1,6 @@
 import { Dispatch } from "react"
 import { CheckCircleIcon, XIcon } from '@heroicons/react/solid'
 
-
-
 export default function Flash({ text, toggle } : {text : string, toggle: Dispatch<boolean>}) {
   return (
     <div className="rounded-md bg-green-50 p-4">
