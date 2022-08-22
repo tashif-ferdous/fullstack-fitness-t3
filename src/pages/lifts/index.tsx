@@ -1,6 +1,7 @@
 import { Lift } from "@prisma/client"
 import type { NextPage } from "next"
 import Head from "next/head"
+import Loader from "../../components/Loader"
 import { trpc } from "../../utils/trpc"
 
 type LiftCardProps = {
@@ -12,25 +13,28 @@ type LiftCardProps = {
 
 const Lifts: NextPage = () => {
   const lifts = trpc.useQuery(["lift.getAll"])
-  console.log(lifts.data)
 
-  return (
-    <>
-      <Head>
-        <title>Fullstack Fitness | Lifts </title>
-        <meta name="description" content="do you even lift bro?" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className="container mx-auto flex flex-col items-center justify-center min-h-screen p-4">
-        <h1 className="text-5xl md:text-[5rem] leading-normal font-extrabold text-gray-700">
-          Supported <span className="text-purple-300">Lifts</span>
-        </h1>
-        <p className="text-2xl text-gray-700">The app supports:</p>
-        {lifts.data?renderLifts(lifts.data): <p> Loading... </p> }
-      </main>
-    </>
-  );
+  if (lifts.data) {
+    return (
+      <>
+        <Head>
+          <title>Fullstack Fitness | Lifts </title>
+          <meta name="description" content="do you even lift bro?" />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+  
+        <main className="container mx-auto flex flex-col items-center justify-center min-h-screen p-4">
+          <h1 className="text-5xl md:text-[5rem] leading-normal font-extrabold text-gray-700">
+            Supported <span className="text-purple-300">Lifts</span>
+          </h1>
+          <p className="text-2xl text-gray-700">The app supports:</p>
+          {renderLifts(lifts.data)}
+        </main>
+      </>
+    )
+  } else {
+    return <Loader title="Fullstack Fitness | Lifts" text="Unpacking the squat rack 🏋️..." />
+  }  
 }
 
 const renderLifts = (lifts?: Lift[]) => {
