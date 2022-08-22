@@ -2,20 +2,23 @@
 
 import React from "react"
 import { useReactTable, createColumnHelper, ColumnDef, getCoreRowModel, flexRender } from "@tanstack/react-table"
+import TimeAgo from "javascript-time-ago"
+import en from "javascript-time-ago/locale/en"
 
 import { Lift, Log } from "@prisma/client"
 
+TimeAgo.addDefaultLocale(en)
+ 
 // for a single user, for a single lift
 export default function SoloLogTable({logs, lifts} : {logs: Log[], lifts: Lift[]}) {
-  // const table = useReactTable()
-
+  const timeAgo = new TimeAgo('en-US')
   const columnHelper = createColumnHelper<Log>()
 
   // All accessor columns
   const logColumns: ColumnDef<Log, any>[] = [
     columnHelper.accessor('createdAt', {
       header: "Time",
-      cell: date => date.getValue().toLocaleString('en-US') 
+      cell: date => timeAgo.format(date.getValue())
     }),
     columnHelper.accessor('liftId', {
       header: "Lift",
