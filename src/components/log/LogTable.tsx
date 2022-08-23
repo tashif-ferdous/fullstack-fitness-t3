@@ -58,7 +58,7 @@ export default function WorkoutTable({logs, lifts, showLink} : {logs: Log[], lif
     }
     else {
       return (<p className="italic">Nothing logged.  Go hit the weights and 
-        <Link href="/log"><a>open the log!</a></Link>!</p>)
+        <Link href="/log"><a className="text-indigo-500 hover:text-indigo-300 hover:cursor-pointer"> open the log!</a></Link></p>)
     }
   }
 

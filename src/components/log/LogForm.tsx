@@ -66,10 +66,10 @@ export default function LogForm({ createLog } : LogFormProps) {
             </div>
             <div>
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                Thoughts
+                Comments
               </label>
               <textarea 
-                {...register("cues", {required: false })}
+                {...register("comments", {required: false })}
                 className="appearance-none block w-full bg-gray-50 text-gray-700 border border-gray-400 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" 
                 placeholder="The lockout is tough, I'm going to do some tricep extensions after."
               /> 

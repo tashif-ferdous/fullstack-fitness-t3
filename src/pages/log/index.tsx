@@ -42,6 +42,8 @@ const Log: NextPage = () => {
   })
 
   const createLog = (data: ILogFormInput) => {
+    console.log('creating LOG: ', data)
+
     createMutation.mutate({
       liftId: selectedLift?.id as number,
       weight: data.weight,

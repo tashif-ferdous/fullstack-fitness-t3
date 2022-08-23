@@ -10,7 +10,7 @@ import SoloLogTable from "../../components/log/LogTable"
 import { useSession } from "next-auth/react"
 import Link from "next/link"
 
-const History: NextPage = () => {
+const Winner: NextPage = () => {
   // what lift are we logging?
   const [selectedLift, setSelectedLift] = useState<Lift | undefined>(undefined)
   const [lifts, setLifts] = useState<Lift[]>([])
@@ -19,17 +19,14 @@ const History: NextPage = () => {
     setSelectedLift(data[0])
   }})
 
-  const [bestLifts, setBestLifts] = useState<Log[]>([])
-  if (selectedLift) {
-    trpc.useQuery(["log.topRepsAnyUser", {take: 1000, liftId: selectedLift.id}], {
-      onSuccess: (data) => {
-        console.log(data)
-        setBestLifts(data)
-      }
-    })
-  }
+  const [history, setHistory] = useState<Log[]>([])
+  trpc.useQuery(["log.getUserLogHistory", {}], {
+    onSuccess: (data) => {
+      setHistory(data)
+    }
+  })
 
-  const title = "Fullstack Fitness | Log History"
+  const title = "Fullstack Fitness | Heaviest Lifts"
   const { data: session } = useSession()
   const name = session?.user?.name
 
@@ -61,15 +58,12 @@ const History: NextPage = () => {
           </Link>
         </section>
         <section className="container mt-8 w:5-6 md:w-3/4 lg:w-2/3">
-          <LiftsSelector lifts={lifts} selectedLift={selectedLift} setLift={setSelectedLift}/>
-        </section>
-        <section className="container mt-8 w:5-6 md:w-3/4 lg:w-2/3">
           <h2 className="mt-3 mb-5 font-semibold uppercase text-xl">Lift History</h2>
-          <SoloLogTable logs={bestLifts} lifts={lifts} showLink />
+          <SoloLogTable logs={history} lifts={lifts} showLink />
         </section>
       </main>
     </>
   )
 }
 
-export default History
+export default Winner
